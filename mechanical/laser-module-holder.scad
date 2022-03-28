@@ -17,18 +17,16 @@ $fn = 60;
 
 module laser_holder_part_2d() {
   difference() {
-    // outer cylinder for thickness of laser module holder
-    circle(d = laser_module_diameter + tolerance + 2*laser_part_thickness);
-
-    // hole for laser module
-    circle(d = laser_module_diameter + tolerance);
-    
-  }
-
-  difference() {
-    translate([-(laser_module_diameter + tolerance + 2*laser_part_thickness)/2, -10, 0]) {
-      square([laser_module_diameter + tolerance + 2*laser_part_thickness, 10]);
+    union() {
+      // outer cylinder for thickness of laser module holder
+      circle(d = laser_module_diameter + tolerance + 2*laser_part_thickness);
+      
+      // part that connects the laser module hole to the base
+      translate([-(laser_module_diameter + tolerance + 2*laser_part_thickness)/2, -10, 0]) {
+        square([laser_module_diameter + tolerance + 2*laser_part_thickness, 10]);
+      }
     }
+
     // hole for laser module
     circle(d = laser_module_diameter + tolerance);
   }
