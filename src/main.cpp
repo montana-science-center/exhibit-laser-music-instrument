@@ -10,12 +10,19 @@ int main() {
 
   static HardwareSerialMIDI_Interface midi {.serial = Serial2, .baud = MIDI_BAUD};
 
-  // NoteButtons lasers {.buttons = [18, 19]}
-  static NoteButton laser1 {.pin = 18, .address = MIDI_Notes::Db(4)};
-  static NoteButton laser2 {.pin = 19, .address = MIDI_Notes::Eb(4)};
+  static NoteButton laser1 {.pin = 34, .address = MIDI_Notes::Db(3)};
+  static NoteButton laser2 {.pin = 35, .address = MIDI_Notes::Eb(3)};
+  static NoteButton laser3 {.pin = 36, .address = MIDI_Notes::Gb(3)};
+  static NoteButton laser4 {.pin = 14, .address = MIDI_Notes::Ab(3)};
+  static NoteButton laser5 {.pin = 15, .address = MIDI_Notes::Bb(3)};
+  static NoteButton laser6 {.pin = 16, .address = MIDI_Notes::Db(4)};
 
   laser1.invert();
   laser2.invert();
+  laser3.invert();
+  laser4.invert();
+  laser5.invert();
+  laser6.invert();
   
   pinMode(LED_PIN, OUTPUT);
   pinMode(VS1053_RST, OUTPUT);
