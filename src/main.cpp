@@ -8,7 +8,7 @@
 
 int main() {
 
-  static HardwareSerialMIDI_Interface midi {.serial = Serial2, .baud = MIDI_BAUD};
+  static HardwareSerialMIDI_Interface midi {.serial = Serial7, .baud = MIDI_BAUD};
 
   static NoteButton laser1 {.pin = 34, .address = MIDI_Notes::Db(3)};
   static NoteButton laser2 {.pin = 35, .address = MIDI_Notes::Eb(3)};
