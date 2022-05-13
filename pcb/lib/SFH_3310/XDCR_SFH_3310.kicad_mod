@@ -154,4 +154,9 @@
   (fp_circle (center -3.56 0.02) (end -3.416822 0.02) (layer "F.Fab") (width 0.2) (fill none) (tstamp 99f452c6-2c0a-42be-8862-c60e42f884a4))
   (pad "1" thru_hole circle (at -1.27 0) (size 2 2) (drill 1) (layers *.Cu) (tstamp c2b0d3e7-2655-4f22-8b6f-b149e8f89482))
   (pad "2" thru_hole circle (at 1.27 0) (size 2 2) (drill 1) (layers *.Cu) (tstamp 6ff9a29c-5f57-4849-b87a-b96691b80fd7))
+  (model "/home/trevor/msc/exhibit-laser-music-instrument/pcb/lib/SFH_3310/SFH_3310.step"
+    (offset (xyz 0 0 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz -90 90 0))
+  )
 )
