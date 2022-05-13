@@ -1,9 +1,9 @@
 // This laser module holder can be used to attach a laser module to a
 // solderless breadboard (not an optical breadboard).
 
-laser_module_diameter = 7;
+laser_module_diameter = 10.4;
 tolerance = 0.5;
-laser_module_length = 21;
+laser_module_length = 20;
 laser_part_thickness = 2.5;
 base_thickness = 2;
 set_screw_diameter = 1.8;
