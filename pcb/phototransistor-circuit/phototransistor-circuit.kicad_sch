@@ -730,10 +730,10 @@
     (property "Reference" "J1" (id 0) (at 174.752 81.4832 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "Conn_01x03" (id 1) (at 174.752 83.7946 0)
+    (property "Value" "" (id 1) (at 174.752 83.7946 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical" (id 2) (at 172.72 82.55 0)
+    (property "Footprint" "" (id 2) (at 172.72 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 172.72 82.55 0)
@@ -795,7 +795,7 @@
   (symbol (lib_id "power:+3V3") (at 62.23 62.23 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 70cda344-73be-4466-a097-1fd56f3b19e2)
-    (property "Reference" "#PWR?" (id 0) (at 62.23 66.04 0)
+    (property "Reference" "#PWR0101" (id 0) (at 62.23 66.04 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "" (id 1) (at 62.23 57.15 0))
@@ -811,7 +811,7 @@
   (symbol (lib_id "power:+3V3") (at 153.67 80.01 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid dffcf68d-1dc4-432b-936a-b761a573d792)
-    (property "Reference" "#PWR?" (id 0) (at 153.67 83.82 0)
+    (property "Reference" "#PWR0102" (id 0) (at 153.67 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (id 1) (at 153.67 74.93 0))
@@ -842,10 +842,10 @@
       (reference "#PWR04") (unit 1) (value "GND") (footprint "")
     )
     (path "/70cda344-73be-4466-a097-1fd56f3b19e2"
-      (reference "#PWR?") (unit 1) (value "+3V3") (footprint "")
+      (reference "#PWR0101") (unit 1) (value "+3V3") (footprint "")
     )
     (path "/dffcf68d-1dc4-432b-936a-b761a573d792"
-      (reference "#PWR?") (unit 1) (value "+3V3") (footprint "")
+      (reference "#PWR0102") (unit 1) (value "+3V3") (footprint "")
     )
     (path "/00000000-0000-0000-0000-0000626bf88c"
       (reference "H1") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_3.2mm_M3")
@@ -854,7 +854,7 @@
       (reference "H2") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_3.2mm_M3")
     )
     (path "/00000000-0000-0000-0000-0000626c1847"
-      (reference "J1") (unit 1) (value "Conn_01x03") (footprint "Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical")
+      (reference "J1") (unit 1) (value "Conn_01x03") (footprint "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-0000626b5645"
       (reference "Q1") (unit 1) (value "SFH_3310") (footprint "SFH_3310:XDCR_SFH_3310")
