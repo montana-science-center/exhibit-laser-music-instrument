@@ -378,11 +378,11 @@
   "pcbnew": {
     "last_paths": {
       "gencad": "",
-      "idf": "",
+      "idf": "phototransistor-circuit.emn",
       "netlist": "phototransistor-circuit.net",
       "specctra_dsn": "",
-      "step": "",
-      "vrml": ""
+      "step": "phototransistor-circuit.step",
+      "vrml": "phototransistor-circuit.wrl"
     },
     "page_layout_descr_file": ""
   },
