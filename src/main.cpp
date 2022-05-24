@@ -1,13 +1,44 @@
 // #include <Arduino.h>
 #include <WProgram.h>
 #include <Control_Surface.h>
+#include <array>
 
 #define MIDI_BAUD 31250
-#define LED_PIN 13
+#define NUM_NOTES 6
+
+
+void lightElWires(Bankable::NoteButton lasers[], const uint8_t EL_WIRE_PINS[]) {
+
+  for (size_t i = 0; i < NUM_NOTES; i++)
+  {
+    auto state = lasers[i].getButtonState();
+
+    // The laser NoteButtons are inverted, so our logic for turning the EL wires on has to be inverted as well. A falling edge is "on", and a rising edge is "off".
+    if (state == Button::Falling) {
+      digitalWrite(EL_WIRE_PINS[i], HIGH);
+    }
+    else if (state == Button::Rising) {
+      digitalWrite(EL_WIRE_PINS[i], LOW);
+    }
+  }
+}
 
 int main() {
 
-  static HardwareSerialMIDI_Interface midi {.serial = Serial7, .baud = MIDI_BAUD};
+  static HardwareSerialMIDI_Interface midiSynth {.serial = Serial7, .baud = MIDI_BAUD};
+
+  const uint8_t EL_WIRE_PINS[NUM_NOTES] = {2, 3, 4, 5, 6, 7};
+
+  static BidirectionalMIDI_Pipe loopbackPipe;
+  static MIDI_Pipe synthTxPipe;
+
+  /* Set up a loopback (MIDI out -> MIDI in) for the "control surface" 
+    (the teensy) so we can read the MIDI messages we send. This allows us to
+    light up EL wires when a note is sent, for example */
+  Control_Surface | loopbackPipe | Control_Surface;
+
+  // Connect MIDI out from the teensy to MIDI in of the synth module
+  Control_Surface >> synthTxPipe >> midiSynth;
 
   static ProgramChanger<128> programChanger {
     {  // list of midi program numbers
@@ -32,7 +63,7 @@ int main() {
     Wrap::Clamp
   };
   
-  static Bankable::NoteButton lasers[] {
+  static Bankable::NoteButton lasers[NUM_NOTES] {
     {.bank = transposer, .pin = 34, .address = MIDI_Notes::Db(3)},
     {.bank = transposer, .pin = 35, .address = MIDI_Notes::Eb(3)},
     {.bank = transposer, .pin = 36, .address = MIDI_Notes::Gb(3)},
@@ -40,22 +71,39 @@ int main() {
     {.bank = transposer, .pin = 15, .address = MIDI_Notes::Bb(3)},
     {.bank = transposer, .pin = 16, .address = MIDI_Notes::Db(4)},
   };
-
-
+  
   for (auto &&laser : lasers)
   {
     laser.invert();
   }
-  
-  
-  pinMode(LED_PIN, OUTPUT);
 
-  digitalWrite(LED_PIN, HIGH);
+
+  // TODO: for some reason, bankable NoteLEDs were not working right. I could only get one el wire to work. Non-bankable NoteLEDs worked just fine. For now, I'm turning the el wires on by checking button state instead of listening for midi notes
+  // static Bankable::NoteLED<transposer.getNumberOfBanks()> elWire1 {
+  //   .bank = transposer, .pin = 2, .address = MIDI_Notes::Db(3),
+  // };
+  // static Bankable::NoteLED<transposer.getNumberOfBanks()> elWire2 {
+  //   .bank = transposer, .pin = 3, .address = MIDI_Notes::Eb(3),
+  // };
+  // static Bankable::NoteLED<transposer.getNumberOfBanks()> elWire3 {
+  //   .bank = transposer, .pin = 4, .address = MIDI_Notes::Gb(3),
+  // };
+  
+  
+  for (auto &&elWirePin : EL_WIRE_PINS)
+  {
+    pinMode(elWirePin, OUTPUT);
+  }
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
 
 
   Control_Surface.begin();
 
   while(1) {
     Control_Surface.loop();
+    lightElWires(lasers, EL_WIRE_PINS);
   }
 }
+
