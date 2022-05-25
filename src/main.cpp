@@ -47,7 +47,6 @@ void lightElWires(Bankable::NoteButton lasers[], const uint8_t EL_WIRE_PINS[]) {
   for (size_t i = 0; i < NUM_NOTES; i++)
   {
     auto state = lasers[i].getButtonState();
-    Serial.println(state);
 
     // The laser NoteButtons are inverted, so our logic for turning the EL wires on has to be inverted as well. A falling edge is "on", and a rising edge is "off".
     if (state == Button::Falling) {
