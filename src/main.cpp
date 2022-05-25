@@ -1,23 +1,73 @@
 // #include <Arduino.h>
 #include <WProgram.h>
 #include <Control_Surface.h>
-// #include "midiProgramNames.h"
+// #include <LiquidCrystal.h>
+#include <hd44780.h>
+#include <hd44780ioClass/hd44780_pinIO.h>
+// #include <iostream>
+#include <sstream>
+#include <string>
+
+#include "midiProgramNames.h"
 
 #define MIDI_BAUD 31250
 #define NUM_NOTES 6
 
-#include "midiProgramNames.h"
+class SelectorLCDDisplayCallback
+{
+private:
+    hd44780_pinIO lcd;
+public:
+    SelectorLCDDisplayCallback(): 
+      lcd(hd44780_pinIO(23, 22, 40, 39, 38, 37)) 
+      {}
 
-class SelectorDisplayCallback
+    ~SelectorLCDDisplayCallback() {} 
+
+    // Begin function is called once by Control Surface.
+    // Use it to initialize everything.
+    void begin() 
+    {
+      lcd.begin(16, 2);
+      lcd.lineWrap();
+    }
+ 
+    // Update function is called continuously by Control Surface.
+    // Use it to implement things like fading, blinking ...
+    void update() {
+      // Serial.println("in the update!");
+    }
+ 
+    // Update function with arguments is called when the setting
+    // changes.
+    // Use it to update the LEDs.
+    void update(setting_t oldSetting, setting_t newSetting) 
+    {
+        lcd.clear();
+
+        std::istringstream programName(PROGRAM_NAMES[newSetting]);
+
+        std::string s;
+
+        while (std::getline(programName, s, '\n'))
+        {
+          lcd.write(s.c_str());
+          lcd.setCursor(0, 1);
+        }
+
+    }
+};
+
+class SelectorSerialDisplayCallback
 {
 private:
     /* data */
 public:
-    SelectorDisplayCallback()
+    SelectorSerialDisplayCallback()
     {
 
     };
-    ~SelectorDisplayCallback() {} ;
+    ~SelectorSerialDisplayCallback() {} ;
 
     // Begin function is called once by Control Surface.
     // Use it to initialize everything.
@@ -38,7 +88,7 @@ public:
     void update(setting_t oldSetting, setting_t newSetting) 
     {
         // Program numbers start 1, but indexes start at 0, so we subtract 1
-        Serial.println(PROGRAM_NAMES[newSetting]);
+        Serial.write(PROGRAM_NAMES[newSetting].c_str());
     }
 };
 
@@ -82,7 +132,7 @@ int main() {
     CHANNEL_1, // MIDI channel to use
   };
 
-  static GenericEncoderSelector<128, SelectorDisplayCallback> programSelector {
+  static GenericEncoderSelector<128, SelectorLCDDisplayCallback> programSelector {
     programChanger,
     {},
     {32, 31},

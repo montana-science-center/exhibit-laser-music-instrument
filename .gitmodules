@@ -1,3 +1,6 @@
 [submodule "lib/Control-Surface"]
 	path = lib/Control-Surface
 	url = https://github.com/tttapa/Control-Surface
+[submodule "lib/hd44780"]
+	path = lib/hd44780
+	url = https://github.com/duinoWitchery/hd44780.git
