@@ -9,6 +9,7 @@
 #include <string>
 
 #include "midiProgramNames.h"
+#include "PBTimeOfFlightSensor.hpp"
 
 #define MIDI_BAUD 31250
 #define NUM_NOTES 6
@@ -73,7 +74,7 @@ public:
     // Use it to initialize everything.
     void begin() 
     {
-        Serial.begin(9600);
+        // Serial.begin(9600);
     }
  
     // Update function is called continuously by Control Surface.
@@ -88,7 +89,7 @@ public:
     void update(setting_t oldSetting, setting_t newSetting) 
     {
         // Program numbers start 1, but indexes start at 0, so we subtract 1
-        Serial.write(PROGRAM_NAMES[newSetting].c_str());
+        // Serial.write(PROGRAM_NAMES[newSetting].c_str());
     }
 };
 
@@ -149,6 +150,11 @@ int main() {
     Wrap::Clamp
   };
   
+  PBTimeOfFlightSensor pitchBender {
+    11,
+    {CHANNEL_1},
+  };
+
   static Bankable::NoteButton lasers[NUM_NOTES] {
     {.bank = transposer, .pin = 34, .address = MIDI_Notes::Db(3)},
     {.bank = transposer, .pin = 35, .address = MIDI_Notes::Eb(3)},
@@ -190,6 +196,13 @@ int main() {
   Control_Surface.begin();
 
   // programChanger.select(0);
+
+  // Set reverb type of delay
+  // Control_Surface.sendControlChange({MIDI_CC::General_Purpose_Controller_5, CHANNEL_1}, 0x05);
+
+  // uint8_t sysex[] = {0x40, 0x01, 0x34, 0x1};
+  
+  // Control_Surface.sendSysEx(sysex);
 
   while(1) {
     Control_Surface.loop();

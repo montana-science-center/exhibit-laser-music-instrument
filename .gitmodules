@@ -4,3 +4,6 @@
 [submodule "lib/hd44780"]
 	path = lib/hd44780
 	url = https://github.com/duinoWitchery/hd44780.git
+[submodule "lib/VL53L4CD"]
+	path = lib/VL53L4CD
+	url = https://github.com/stm32duino/VL53L4CD.git
