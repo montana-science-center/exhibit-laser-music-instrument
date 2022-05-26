@@ -151,8 +151,8 @@ int main() {
   };
   
   PBTimeOfFlightSensor pitchBender {
-    11,
-    {CHANNEL_1},
+    24,
+    CHANNEL_1,
   };
 
   static Bankable::NoteButton lasers[NUM_NOTES] {
