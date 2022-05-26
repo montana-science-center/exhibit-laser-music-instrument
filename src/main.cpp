@@ -7,6 +7,8 @@
 // #include <iostream>
 #include <sstream>
 #include <string>
+#include <Arduino_Helpers.h>
+#include <AH/Timing/MillisMicrosTimer.hpp>
 
 #include "midiProgramNames.h"
 #include "PBTimeOfFlightSensor.hpp"
@@ -169,6 +171,7 @@ int main() {
     laser.invert();
   }
 
+  Timer<millis> heartbeatTimer = 500;
 
   // TODO: for some reason, bankable NoteLEDs were not working right. I could only get one el wire to work. Non-bankable NoteLEDs worked just fine. For now, I'm turning the el wires on by checking button state instead of listening for midi notes
   // static Bankable::NoteLED<transposer.getNumberOfBanks()> elWire1 {
@@ -188,7 +191,6 @@ int main() {
   }
 
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
 
   // Serial.begin(9600);
 
@@ -208,6 +210,10 @@ int main() {
     Control_Surface.loop();
 
     lightElWires(lasers, EL_WIRE_PINS);
+
+    if (heartbeatTimer) {
+      digitalWrite(LED_BUILTIN, digitalRead(LED_BUILTIN) ? LOW : HIGH);
+    }
 
   }
 }
