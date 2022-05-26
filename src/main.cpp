@@ -20,9 +20,17 @@ class SelectorLCDDisplayCallback
 {
 private:
     hd44780_pinIO lcd;
+    const pin_t redPin;
+    const pin_t greenPin;
+    const pin_t bluePin;
+    uint8_t redVal;
+    uint8_t greenVal;
+    uint8_t blueVal;
 public:
     SelectorLCDDisplayCallback(): 
-      lcd(hd44780_pinIO(23, 22, 40, 39, 38, 37)) 
+      lcd(hd44780_pinIO(23, 22, 40, 39, 38, 37)),
+      redPin(8), greenPin(9), bluePin(10),
+      redVal(255), greenVal(50), blueVal(0)
       {}
 
     ~SelectorLCDDisplayCallback() {} 
@@ -33,6 +41,16 @@ public:
     {
       lcd.begin(16, 2);
       lcd.lineWrap();
+
+      // invert the duty cycle because the LCD backlight is common anode
+      redVal = map(redVal, 0, 255, 255, 0);
+      greenVal = map(greenVal, 0, 255, 255, 0);
+      blueVal = map(blueVal, 0, 255, 255, 0);
+
+      // set rgb backlight color
+      analogWrite(redPin, redVal);
+      analogWrite(greenPin, greenVal);
+      analogWrite(bluePin, blueVal);
     }
  
     // Update function is called continuously by Control Surface.
@@ -143,6 +161,14 @@ int main() {
     Wrap::Wrap,
   };
 
+
+  // static CCRotaryEncoder effectEncoder {
+  //   {26, 28},
+  //   {MIDI_CC::General_Purpose_Controller_5},
+  //   1,
+  //   1,
+  // };
+
   static Transposer<-12, +12> transposer;
 
   static EncoderSelector<transposer.getNumberOfBanks()> pitchSelector {
@@ -194,13 +220,20 @@ int main() {
 
   // Serial.begin(9600);
 
+  CCPotentiometer effectPot {
+    A12,
+    {MIDI_CC::Effects_1}
+  };
+
 
   Control_Surface.begin();
 
   // programChanger.select(0);
 
   // Set reverb type of delay
-  // Control_Surface.sendControlChange({MIDI_CC::General_Purpose_Controller_5, CHANNEL_1}, 0x05);
+  Control_Surface.sendControlChange({MIDI_CC::General_Purpose_Controller_5, CHANNEL_1}, 0x03);
+
+  // Control_Surface.sendControlChange(MIDI_CC::Effects_1, 0x7f);
 
   // uint8_t sysex[] = {0x40, 0x01, 0x34, 0x1};
   
@@ -214,6 +247,8 @@ int main() {
     if (heartbeatTimer) {
       digitalWrite(LED_BUILTIN, digitalRead(LED_BUILTIN) ? LOW : HIGH);
     }
+
+    // Serial.println(effectEncoder.getValue());
 
   }
 }
