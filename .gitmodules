@@ -7,3 +7,9 @@
 [submodule "lib/VL53L4CD"]
 	path = lib/VL53L4CD
 	url = https://github.com/stm32duino/VL53L4CD.git
+[submodule "pcb/lib/teensy_library"]
+	path = pcb/lib/teensy_library
+	url = https://github.com/XenGi/teensy_library.git
+[submodule "pcb/lib/teensy.pretty"]
+	path = pcb/lib/teensy.pretty
+	url = https://github.com/XenGi/teensy.pretty.git
