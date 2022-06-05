@@ -1,0 +1,11 @@
+(fp_lib_table
+  (lib (name "teensy")(type "KiCad")(uri "${KIPRJMOD}/../lib/teensy.pretty")(options "")(descr ""))
+  (lib (name "AOI4286")(type "KiCad")(uri "${KIPRJMOD}/../lib/AOI4286/AOI4286.pretty")(options "")(descr ""))
+  (lib (name "L7807CV")(type "KiCad")(uri "${KIPRJMOD}/../lib/L7808CV/L7807CV.pretty")(options "")(descr ""))
+  (lib (name "L7805ABV")(type "KiCad")(uri "${KIPRJMOD}/../lib/L7805ABV")(options "")(descr ""))
+  (lib (name "Wurth-691137710002")(type "KiCad")(uri "${KIPRJMOD}/../lib/Wurth-691137710002")(options "")(descr ""))
+  (lib (name "Molex-0901301118")(type "KiCad")(uri "${KIPRJMOD}/../lib/Molex-0901301118")(options "")(descr ""))
+  (lib (name "GM-minimodule")(type "KiCad")(uri "${KIPRJMOD}/../lib/GM-minimodule")(options "")(descr ""))
+  (lib (name "msc-logos")(type "KiCad")(uri "${KIPRJMOD}/../lib/msc-logos")(options "")(descr ""))
+  (lib (name "misc-silkscreen")(type "KiCad")(uri "${KIPRJMOD}/../lib/misc-silkscreen")(options "")(descr ""))
+)
