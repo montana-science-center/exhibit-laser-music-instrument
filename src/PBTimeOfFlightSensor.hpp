@@ -21,7 +21,7 @@ public:
      *          The MIDI note velocity [0, 127].
      */
     PBTimeOfFlightSensor(pin_t xshutPin, MIDIChannelCable channel)
-        : sensor(&Wire, xshutPin), channel(channel) {}
+        : sensor(&Wire2, xshutPin), channel(channel) {}
 
 public:
     // Initialize: enable the pull-up resistor for the button
@@ -31,7 +31,7 @@ public:
         Serial.begin(9600);
 
         // Initialize I2C bus.
-        Wire.begin();
+        Wire2.begin();
         // i2cDev->begin();
 
         // Serial.println("after i2cdev");

@@ -28,8 +28,8 @@ private:
     uint8_t blueVal;
 public:
     SelectorLCDDisplayCallback(): 
-      lcd(hd44780_pinIO(23, 22, 40, 39, 38, 37)),
-      redPin(8), greenPin(9), bluePin(10),
+      lcd(hd44780_pinIO(19, 18, 17, 16, 15, 14)),
+      redPin(37), greenPin(33), bluePin(36),
       redVal(255), greenVal(50), blueVal(0)
       {}
 
@@ -131,9 +131,9 @@ void lightElWires(Bankable::NoteButton lasers[], const uint8_t EL_WIRE_PINS[]) {
 
 int main() {
 
-  static HardwareSerialMIDI_Interface midiSynth {.serial = Serial7, .baud = MIDI_BAUD};
+  static HardwareSerialMIDI_Interface midiSynth {.serial = Serial5, .baud = MIDI_BAUD};
 
-  const uint8_t EL_WIRE_PINS[NUM_NOTES] = {2, 3, 4, 5, 6, 7};
+  const uint8_t EL_WIRE_PINS[NUM_NOTES] = {28, 30, 32, 34, 29, 31};
 
   static BidirectionalMIDI_Pipe loopbackPipe;
   static MIDI_Pipe synthTxPipe;
@@ -156,40 +156,34 @@ int main() {
   static GenericEncoderSelector<128, SelectorLCDDisplayCallback> programSelector {
     programChanger,
     {},
-    {32, 31},
+    {12, 27},
     1,
     Wrap::Wrap,
   };
 
 
-  // static CCRotaryEncoder effectEncoder {
-  //   {26, 28},
-  //   {MIDI_CC::General_Purpose_Controller_5},
-  //   1,
-  //   1,
-  // };
 
   static Transposer<-12, +12> transposer;
 
   static EncoderSelector<transposer.getNumberOfBanks()> pitchSelector {
     transposer,
-    {25, 27},
+    {11, 10},
     1,
     Wrap::Clamp
   };
   
   PBTimeOfFlightSensor pitchBender {
-    24,
+    26,
     CHANNEL_1,
   };
 
   static Bankable::NoteButton lasers[NUM_NOTES] {
-    {.bank = transposer, .pin = 34, .address = MIDI_Notes::Db(3)},
-    {.bank = transposer, .pin = 35, .address = MIDI_Notes::Eb(3)},
-    {.bank = transposer, .pin = 36, .address = MIDI_Notes::Gb(3)},
-    {.bank = transposer, .pin = 14, .address = MIDI_Notes::Ab(3)},
-    {.bank = transposer, .pin = 15, .address = MIDI_Notes::Bb(3)},
-    {.bank = transposer, .pin = 16, .address = MIDI_Notes::Db(4)},
+    {.bank = transposer, .pin = 0, .address = MIDI_Notes::Db(3)},
+    {.bank = transposer, .pin = 1, .address = MIDI_Notes::Eb(3)},
+    {.bank = transposer, .pin = 2, .address = MIDI_Notes::Gb(3)},
+    {.bank = transposer, .pin = 3, .address = MIDI_Notes::Ab(3)},
+    {.bank = transposer, .pin = 4, .address = MIDI_Notes::Bb(3)},
+    {.bank = transposer, .pin = 5, .address = MIDI_Notes::Db(4)},
   };
   
   for (auto &&laser : lasers)
@@ -197,7 +191,7 @@ int main() {
     laser.invert();
   }
 
-  Timer<millis> heartbeatTimer = 500;
+  Timer<millis> heartbeatTimer = 250;
 
   // TODO: for some reason, bankable NoteLEDs were not working right. I could only get one el wire to work. Non-bankable NoteLEDs worked just fine. For now, I'm turning the el wires on by checking button state instead of listening for midi notes
   // static Bankable::NoteLED<transposer.getNumberOfBanks()> elWire1 {
@@ -220,10 +214,10 @@ int main() {
 
   // Serial.begin(9600);
 
-  CCPotentiometer effectPot {
-    A12,
-    {MIDI_CC::Effects_1}
-  };
+  // CCPotentiometer effectPot {
+  //   A12,
+  //   {MIDI_CC::Effects_1}
+  // };
 
 
   Control_Surface.begin();
@@ -231,7 +225,7 @@ int main() {
   // programChanger.select(0);
 
   // Set reverb type of delay
-  Control_Surface.sendControlChange({MIDI_CC::General_Purpose_Controller_5, CHANNEL_1}, 0x03);
+  // Control_Surface.sendControlChange({MIDI_CC::General_Purpose_Controller_5, CHANNEL_1}, 0x03);
 
   // Control_Surface.sendControlChange(MIDI_CC::Effects_1, 0x7f);
 
@@ -250,6 +244,10 @@ int main() {
 
     // Serial.println(effectEncoder.getValue());
 
+
   }
 }
+
+
+// TODO: set pull-down resistors on EL wire pins just to be safe?
 
