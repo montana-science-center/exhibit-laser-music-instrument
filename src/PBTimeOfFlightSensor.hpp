@@ -28,7 +28,7 @@ public:
     // This method is called once by `Control_Surface.begin()`.
     void begin() final override
     {
-        Serial.begin(9600);
+        // Serial.begin(9600);
 
         // Initialize I2C bus.
         Wire2.begin();
@@ -77,6 +77,8 @@ public:
                      results.signal_per_spad_kcps);
             // Serial.print(report);
 
+            rangeStatus = results.range_status;
+
             newDataReady = 0;
 
             if (results.range_status == 0) {
@@ -84,25 +86,66 @@ public:
 
                 distance = constrain(distance, MIN_DISTANCE, MAX_DISTANCE);
 
-                uint16_t pitchBendValue = map(distance, MIN_DISTANCE, MAX_DISTANCE, MIN_PITCH_BEND, MAX_PITCH_BEND);
+                pitchBendValue = map(distance, MIN_DISTANCE, MAX_DISTANCE, MIN_PITCH_BEND, MAX_PITCH_BEND);
 
+                pitchBendValue = filter.filter(pitchBendValue);
+                // Serial.println(pitchBendValue);
+                Control_Surface.sendPitchBend(channel, pitchBendValue);
+
+            }
+            else if (prevRangeStatus == 0 || rangeStatus == 1 || rangeStatus == 2) 
+            {
+                // Don't change the pitch bend value if we just changed out of
+                // the valid data state. The sensor will sometimes get a sample
+                // or two that aren't valid, and then go back to valid. We don't
+                // want the pitch bend to rapidly change when this happens.
+
+                // range status == 0 -> okay
+                // range status == 1 -> warning: signal is above defined threshold
+                // range status == 2 -> warning: signal is below defined threshold
+                //https://www.st.com/resource/en/user_manual/um2931-a-guide-to-using-the-vl53l4cd-ultra-lite-driver-uld-stmicroelectronics.pdf
+
+
+                // Serial.println("prevRangeStatus == 0");
+                // Serial.println(pitchBendValue);
+                // initialize the filter with the pitch bend value
+                // pitchBendValue = filter.filter(pitchBendValue);
+                // Serial.println(pitchBendValue);
+                // Control_Surface.sendPitchBend(channel, pitchBendValue);
+            }
+            else
+            {
+                // filter back to zero pitch bend
+                pitchBendValue = filter.filter(8192) ;
+                // Serial.println("prevRangeStatus != 0");
+                // Serial.println(pitchBendValue);
                 Control_Surface.sendPitchBend(channel, pitchBendValue);
             }
 
+            prevRangeStatus = rangeStatus;
+
         }
         else {
+            // Data isn't ready yet
             // Serial.println("data not ready!");
         }
         // Serial.println("test");
-    }
+
+
+        }
+    
 
 private:
     TwoWire *i2cDev;
     VL53L4CD sensor;
+    uint16_t pitchBendValue = 8192;
+    uint8_t rangeStatus;
+    uint8_t prevRangeStatus;
+    EMA<2, uint16_t, uint32_t> filter;
     const MIDIChannelCable channel;
     uint8_t newDataReady = 0;
     const uint16_t MIN_DISTANCE = 20;
-    const uint16_t MAX_DISTANCE = 1300;
-    const uint16_t MIN_PITCH_BEND = -8192;
-    const uint16_t MAX_PITCH_BEND = 8191;
+    const uint16_t MAX_DISTANCE = 700;
+    const uint16_t MIN_PITCH_BEND = 0;
+    const uint16_t MAX_PITCH_BEND = 16383;
 };
