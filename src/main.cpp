@@ -178,12 +178,12 @@ int main() {
   };
 
   static Bankable::NoteButton lasers[NUM_NOTES] {
-    {.bank = transposer, .pin = 0, .address = MIDI_Notes::Db(3)},
-    {.bank = transposer, .pin = 1, .address = MIDI_Notes::Eb(3)},
-    {.bank = transposer, .pin = 2, .address = MIDI_Notes::Gb(3)},
-    {.bank = transposer, .pin = 3, .address = MIDI_Notes::Ab(3)},
-    {.bank = transposer, .pin = 4, .address = MIDI_Notes::Bb(3)},
-    {.bank = transposer, .pin = 5, .address = MIDI_Notes::Db(4)},
+    {.bank = transposer, .pin = 5, .address = MIDI_Notes::Db(3)},
+    {.bank = transposer, .pin = 4, .address = MIDI_Notes::Eb(3)},
+    {.bank = transposer, .pin = 3, .address = MIDI_Notes::Gb(3)},
+    {.bank = transposer, .pin = 2, .address = MIDI_Notes::Ab(3)},
+    {.bank = transposer, .pin = 1, .address = MIDI_Notes::Bb(3)},
+    {.bank = transposer, .pin = 0, .address = MIDI_Notes::Db(4)},
   };
   
   for (auto &&laser : lasers)
