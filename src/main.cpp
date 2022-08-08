@@ -1,9 +1,9 @@
 // #include <Arduino.h>
 #include <WProgram.h>
 #include <Control_Surface.h>
-// #include <LiquidCrystal.h>
-#include <hd44780.h>
-#include <hd44780ioClass/hd44780_pinIO.h>
+#include <LiquidCrystal.h>
+// #include <hd44780.h>
+// #include <hd44780ioClass/hd44780_pinIO.h>
 // #include <iostream>
 #include <sstream>
 #include <string>
@@ -15,11 +15,12 @@
 
 #define MIDI_BAUD 31250
 #define NUM_NOTES 6
+#define NUM_PROGRAMS 114
 
 class SelectorLCDDisplayCallback
 {
 private:
-    hd44780_pinIO lcd;
+    LiquidCrystal lcd;
     const pin_t redPin;
     const pin_t greenPin;
     const pin_t bluePin;
@@ -28,7 +29,7 @@ private:
     uint8_t blueVal;
 public:
     SelectorLCDDisplayCallback(): 
-      lcd(hd44780_pinIO(19, 18, 17, 16, 15, 14)),
+      lcd(LiquidCrystal(19, 18, 17, 16, 15, 14)),
       redPin(37), greenPin(33), bluePin(36),
       redVal(255), greenVal(50), blueVal(0)
       {}
@@ -40,7 +41,6 @@ public:
     void begin() 
     {
       lcd.begin(16, 2);
-      lcd.lineWrap();
 
       // invert the duty cycle because the LCD backlight is common anode
       redVal = map(redVal, 0, 255, 255, 0);
@@ -72,7 +72,8 @@ public:
 
         while (std::getline(programName, s, '\n'))
         {
-          lcd.write(s.c_str());
+          lcd.print(s.c_str());
+          // Serial.println(s.c_str());
           lcd.setCursor(0, 1);
         }
 
@@ -135,6 +136,8 @@ int main() {
 
   const uint8_t EL_WIRE_PINS[NUM_NOTES] = {28, 30, 32, 34, 29, 31};
 
+  
+
   static BidirectionalMIDI_Pipe loopbackPipe;
   static MIDI_Pipe synthTxPipe;
 
@@ -146,14 +149,18 @@ int main() {
   // Connect MIDI out from the teensy to MIDI in of the synth module
   Control_Surface >> synthTxPipe >> midiSynth;
 
-  static ProgramChanger<128> programChanger {
+  static ProgramChanger<NUM_PROGRAMS> programChanger {
     {  // list of midi program numbers
-      0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127
+      0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,
     },
     CHANNEL_1, // MIDI channel to use
   };
 
-  static GenericEncoderSelector<128, SelectorLCDDisplayCallback> programSelector {
+  
+  // Set initial program to jazz electric guitar
+  programChanger.setInitialSelection(26);
+
+  static GenericEncoderSelector<NUM_PROGRAMS, SelectorLCDDisplayCallback> programSelector {
     programChanger,
     {},
     {12, 27},
@@ -169,7 +176,7 @@ int main() {
     transposer,
     {11, 10},
     1,
-    Wrap::Clamp
+    Wrap::Wrap
   };
   
   PBTimeOfFlightSensor pitchBender {
