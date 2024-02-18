@@ -229,7 +229,8 @@ int main() {
 
   Control_Surface.begin();
 
-  // programChanger.select(0);
+  // program 28 is nylon-string guitar
+  programChanger.select(25);
 
   // Set reverb type of delay
   // Control_Surface.sendControlChange({MIDI_CC::General_Purpose_Controller_5, CHANNEL_1}, 0x03);
