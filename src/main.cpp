@@ -132,7 +132,7 @@ void lightElWires(Bankable::NoteButton lasers[], const uint8_t EL_WIRE_PINS[]) {
 
 int main() {
 
-  static HardwareSerialMIDI_Interface midiSynth {.serial = Serial5, .baud = MIDI_BAUD};
+  static HardwareSerialMIDI_Interface midiSynth = HardwareSerialMIDI_Interface(Serial5, MIDI_BAUD);
 
   const uint8_t EL_WIRE_PINS[NUM_NOTES] = {28, 30, 32, 34, 29, 31};
 
