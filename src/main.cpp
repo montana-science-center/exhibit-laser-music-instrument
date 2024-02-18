@@ -114,7 +114,7 @@ public:
     }
 };
 
-void lightElWires(Bankable::NoteButton lasers[], const uint8_t EL_WIRE_PINS[]) {
+void lightElWires(NoteButton lasers[], const uint8_t EL_WIRE_PINS[]) {
 
   for (size_t i = 0; i < NUM_NOTES; i++)
   {
@@ -158,41 +158,48 @@ int main() {
 
   
   // Set initial program to jazz electric guitar
-  programChanger.setInitialSelection(26);
+  // programChanger.setInitialSelection(26);
 
-  static GenericEncoderSelector<NUM_PROGRAMS, SelectorLCDDisplayCallback> programSelector {
-    programChanger,
-    {},
-    {12, 27},
-    1,
-    Wrap::Wrap,
-  };
+  // static GenericEncoderSelector<NUM_PROGRAMS, SelectorLCDDisplayCallback> programSelector {
+  //   programChanger,
+  //   {},
+  //   {12, 27},
+  //   1,
+  //   Wrap::Wrap,
+  // };
 
 
 
-  static Transposer<-12, +12> transposer;
+  // static Transposer<-12, +12> transposer;
 
-  static EncoderSelector<transposer.getNumberOfBanks()> pitchSelector {
-    transposer,
-    {11, 10},
-    1,
-    Wrap::Wrap
-  };
+  // static EncoderSelector<transposer.getNumberOfBanks()> pitchSelector {
+  //   transposer,
+  //   {11, 10},
+  //   1,
+  //   Wrap::Wrap
+  // };
   
-  PBTimeOfFlightSensor pitchBender {
-    26,
-    CHANNEL_1,
-  };
+  // PBTimeOfFlightSensor pitchBender {
+  //   26,
+  //   CHANNEL_1,
+  // };
 
-  static Bankable::NoteButton lasers[NUM_NOTES] {
-    {.bank = transposer, .pin = 5, .address = MIDI_Notes::Db(3)},
-    {.bank = transposer, .pin = 4, .address = MIDI_Notes::Eb(3)},
-    {.bank = transposer, .pin = 3, .address = MIDI_Notes::Gb(3)},
-    {.bank = transposer, .pin = 2, .address = MIDI_Notes::Ab(3)},
-    {.bank = transposer, .pin = 1, .address = MIDI_Notes::Bb(3)},
-    {.bank = transposer, .pin = 0, .address = MIDI_Notes::Db(4)},
+  static NoteButton lasers[NUM_NOTES] {
+    {5, MIDI_Notes::Db(3)},
+    {4, MIDI_Notes::Eb(3)},
+    {3, MIDI_Notes::Gb(3)},
+    {2, MIDI_Notes::Ab(3)},
+    {1, MIDI_Notes::Bb(3)},
+    {0, MIDI_Notes::Db(4)},
   };
-  
+  // static Bankable::NoteButton lasers[NUM_NOTES] {
+  //   {transposer, 5, MIDI_Notes::Db(3)},
+  //   {transposer, 4, MIDI_Notes::Eb(3)},
+  //   {transposer, 3, MIDI_Notes::Gb(3)},
+  //   {transposer, 2, MIDI_Notes::Ab(3)},
+  //   {transposer, 1, MIDI_Notes::Bb(3)},
+  //   {transposer, 0, MIDI_Notes::Db(4)},
+  // };
   for (auto &&laser : lasers)
   {
     laser.invert();
@@ -229,7 +236,7 @@ int main() {
 
   Control_Surface.begin();
 
-  // program 28 is nylon-string guitar
+  // program 25 is nylon-string guitar
   programChanger.select(25);
 
   // Set reverb type of delay
